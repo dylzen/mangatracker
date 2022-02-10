@@ -1,21 +1,12 @@
 import os
 from time import sleep
-import config
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+import config as config
 from openpyxl import load_workbook
 import requests
 import re
 from bs4 import BeautifulSoup
 
 def get_manga():
-    print("Initializing webdriver...")
-    chrome_options = Options()
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--disable-dev-shm-usage')
-    driver = webdriver.Chrome(options=chrome_options)
-
     print("Reading titles list from excel file...")
     path_test = os.path.join(os.path.expanduser('~'), 'coding', 'files', 'Manga Collection 2021.xlsx')
     workBook = load_workbook(path_test, read_only=False)
@@ -186,10 +177,5 @@ def get_manga():
         sheet.cell(row=i+1, column=column, value=value)
 
     book.save(path_test)
-
-    print("Stopping webdriver...")
-    driver.stop_client()
-    driver.close()
-    driver.quit()
-
+   
     print("Program stopped.")

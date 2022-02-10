@@ -1,8 +1,6 @@
 import os
 from datetime import datetime
 from selenium import webdriver
-from selenium.webdriver import chrome
-from selenium.webdriver.chrome import options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
