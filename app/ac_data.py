@@ -76,7 +76,7 @@ def get_manga():
         volumes.append(target_volumi.strip())
         italy_statuses.append(target_statoIt.strip())
 
-        if target_statoIt.strip() == "in corso" and soup.find(text="Prossima uscita") is not None:
+        if ((target_statoIt.strip() == "in corso") or (target_statoIt.strip() == "annunciato")) and soup.find(text="Prossima uscita") is not None:
             prossima_uscita = soup.find('h3').getText()
             next_releases_long.append(prossima_uscita.strip())
             next_release_link = soup.select_one("a[href*=edizione\/]")
