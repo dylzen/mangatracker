@@ -1,15 +1,17 @@
 import ac_data
 import mal_data
+import popculture
 
 
 USER_CHOICE = """
-Choose which service you want to fetch from:
-- 'a' : AC - basic metadata and next volumes dates
-- 'm' : MAL - ratings, popularity and rank
-- 'b' : Fetches from both services and then quits
+Choose an option:
+- 'a' : AC - get basic metadata and next volumes dates
+- 'm' : MAL - get ratings, popularity and rank
+- 'b' : Fetches from both services, then quits
+- 'p' : Search for manga (user input) and get volumes' links, then quits
 - 'q' : QUIT
 
-Scelta: """
+Choice: """
 
 def menu():
     user_input = input(USER_CHOICE)
@@ -21,6 +23,9 @@ def menu():
         elif user_input == 'b':
             ac_data.get_manga()
             mal_data.get_manga()
+            quit()
+        elif user_input == 'p':
+            popculture.search_manga()
             quit()
         user_input = input(USER_CHOICE)
 
