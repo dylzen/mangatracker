@@ -22,11 +22,10 @@ def menu():
             ac_data.get_release_dates()
             ac_data.write_info
         elif user_input == 'm':
-            mal_data.start_driver()
             mal_data.get_titles()
             mal_data.get_metadata()
-            mal_data.write_metadata()
-            mal_data.stop_driver()
+            # mal_data.write_metadata()
+            # mal_data.stop_driver()
         elif user_input == 'b':
             ac_data.get_titles()
             ac_data.get_info()
