@@ -78,7 +78,6 @@ def get_metadata():
 
     workBook.save(path)
 
-
     print("Stopping webdriver...")
     driver.stop_client()
     driver.close()
