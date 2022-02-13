@@ -17,12 +17,26 @@ def menu():
     user_input = input(USER_CHOICE)
     while user_input != 'q':
         if user_input == 'a':
-            ac_data.get_manga()    
+            ac_data.get_titles()
+            ac_data.get_info()
+            ac_data.get_release_dates()
+            ac_data.write_info
         elif user_input == 'm':
-            mal_data.get_manga()
+            mal_data.start_driver()
+            mal_data.get_titles()
+            mal_data.get_metadata()
+            mal_data.write_metadata()
+            mal_data.stop_driver()
         elif user_input == 'b':
-            ac_data.get_manga()
-            mal_data.get_manga()
+            ac_data.get_titles()
+            ac_data.get_info()
+            ac_data.get_release_dates()
+            ac_data.write_info
+            mal_data.start_driver()
+            mal_data.get_titles()
+            mal_data.get_metadata()
+            mal_data.write_metadata()
+            mal_data.stop_driver()
             quit()
         elif user_input == 'p':
             popculture.search_manga()

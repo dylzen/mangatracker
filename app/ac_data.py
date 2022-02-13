@@ -6,7 +6,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
-def get_manga():
+def get_titles():
     print("Reading titles list from excel file...")
     path_test = os.path.join(os.path.expanduser('~'), 'coding', 'files', 'Manga Collection 2021.xlsx')
     workBook = load_workbook(path_test, read_only=False)
@@ -17,6 +17,7 @@ def get_manga():
     for row in workSheet.iter_rows(min_row=2, min_col=26):
         mangalist.append(row[0].value)
 
+def get_info():
     print("Fetching data...")
     home_url = config.ac_home_url
     titles_ita = []
@@ -106,6 +107,7 @@ def get_manga():
             latest_releases_dates.append("N.D.")
             continue
 
+def get_release_dates():
     print("Creating dates list...")
     next_volume_dates = []
     latest_volume_dates = []
@@ -132,50 +134,50 @@ def get_manga():
     for date in next_volume_dates:
         dates_new.append(date.replace('/01/', 'gen').replace('/11/', 'nov').replace('/12/', 'dic'))
 
-    print("Writing data to excel file...")
-    book = load_workbook(path_test)
-    sheet = book['auto']
-    column = 1
-    sheet.cell(row=1, column=column, value="Titolo italiano")
-    for i, value in enumerate(titles_ita, start=1):
-        sheet.cell(row=i+1, column=column, value=value)
-    column = 2
-    sheet.cell(row=1, column=column, value="Storia")
-    for i, value in enumerate(stories, start=1):
-        sheet.cell(row=i+1, column=column, value=value)
-    column = 3
-    sheet.cell(row=1, column=column, value="Disegni")
-    for i, value in enumerate(drawings, start=1):
-        sheet.cell(row=i+1, column=column, value=value)
-    column = 4
-    sheet.cell(row=1, column=column, value="Categoria")
-    for i, value in enumerate(categories, start=1):
-        sheet.cell(row=i+1, column=column, value=value)
-    column = 5
-    sheet.cell(row=1, column=column, value="Anno")
-    for i, value in enumerate(years, start=1):
-        sheet.cell(row=i+1, column=column, value=value)
-    column = 6
-    sheet.cell(row=1, column=column, value="Volumi pubblicati")
-    for i, value in enumerate(volumes, start=1):
-        sheet.cell(row=i+1, column=column, value=value)
-    column = 7
-    sheet.cell(row=1, column=column, value="Ultimo volume")
-    for i, value in enumerate(latest_releases, start=1):
-        sheet.cell(row=i+1, column=column, value=value)
-    column = 8
-    sheet.cell(row=1, column=column, value="Ultima data di uscita")
-    for i, value in enumerate(latest_volume_dates, start=1):
-        sheet.cell(row=i+1, column=column, value=value)
-    column = 9
-    sheet.cell(row=1, column=column, value="Prossimo volume")
-    for i, value in enumerate(next_releases_long, start=1):
-        sheet.cell(row=i+1, column=column, value=value)
-    column = 10
-    sheet.cell(row=1, column=column, value="Prossima data di uscita")
-    for i, value in enumerate(next_volume_dates, start=1):
-        sheet.cell(row=i+1, column=column, value=value)
+def write_info():
+        print("Writing data to excel file...")
+        book = load_workbook(path_test)
+        sheet = book['auto']
+        column = 1
+        sheet.cell(row=1, column=column, value="Titolo italiano")
+        for i, value in enumerate(titles_ita, start=1):
+            sheet.cell(row=i+1, column=column, value=value)
+        column = 2
+        sheet.cell(row=1, column=column, value="Storia")
+        for i, value in enumerate(stories, start=1):
+            sheet.cell(row=i+1, column=column, value=value)
+        column = 3
+        sheet.cell(row=1, column=column, value="Disegni")
+        for i, value in enumerate(drawings, start=1):
+            sheet.cell(row=i+1, column=column, value=value)
+        column = 4
+        sheet.cell(row=1, column=column, value="Categoria")
+        for i, value in enumerate(categories, start=1):
+            sheet.cell(row=i+1, column=column, value=value)
+        column = 5
+        sheet.cell(row=1, column=column, value="Anno")
+        for i, value in enumerate(years, start=1):
+            sheet.cell(row=i+1, column=column, value=value)
+        column = 6
+        sheet.cell(row=1, column=column, value="Volumi pubblicati")
+        for i, value in enumerate(volumes, start=1):
+            sheet.cell(row=i+1, column=column, value=value)
+        column = 7
+        sheet.cell(row=1, column=column, value="Ultimo volume")
+        for i, value in enumerate(latest_releases, start=1):
+            sheet.cell(row=i+1, column=column, value=value)
+        column = 8
+        sheet.cell(row=1, column=column, value="Ultima data di uscita")
+        for i, value in enumerate(latest_volume_dates, start=1):
+            sheet.cell(row=i+1, column=column, value=value)
+        column = 9
+        sheet.cell(row=1, column=column, value="Prossimo volume")
+        for i, value in enumerate(next_releases_long, start=1):
+            sheet.cell(row=i+1, column=column, value=value)
+        column = 10
+        sheet.cell(row=1, column=column, value="Prossima data di uscita")
+        for i, value in enumerate(next_volume_dates, start=1):
+            sheet.cell(row=i+1, column=column, value=value)
 
-    book.save(path_test)
-   
-    print("Program stopped.")
+        book.save(path_test)
+        print("Data written successfully.")
