@@ -47,29 +47,28 @@ def get_data(user_input):
 def write_to_xlsx(user_input):
     print("Writing data to excel file...")
     user_input, ratings, members, rankings, popularities = get_data(user_input)
-    # path = os.path.join(os.path.expanduser('~'), 'coding', 'files', 'Manga Collection 2021.xlsx')
     path, book = file_ops.load_book()
     sheet = book['Lista']
     now = datetime.now()
     timestamp = now.strftime("%d/%m/%Y %H:%M:%S")
 
-    sheet.cell(row=1, column=20, value="ratings_mal")       # colonna T
+    sheet.cell(row=1, column=20, value="ratings_mal")           # column T
     for row_num, value in enumerate(ratings, start=2):
         sheet.cell(row=row_num, column=20, value=value)
 
-    sheet.cell(row=1, column=21, value="members_MAL")       # colonna U
+    sheet.cell(row=1, column=21, value="members_MAL")           # column U
     for row_num, value in enumerate(members, start=2):
         sheet.cell(row=row_num, column=21, value=value)
 
-    sheet.cell(row=1, column=22, value="ranking_MAL")       # colonna V
+    sheet.cell(row=1, column=22, value="ranking_MAL")           # column V
     for row_num, value in enumerate(rankings, start=2):
         sheet.cell(row=row_num, column=22, value=value)
 
-    sheet.cell(row=1, column=23, value="popularity_MAL")    # colonna W
+    sheet.cell(row=1, column=23, value="popularity_MAL")        # column W
     for row_num, value in enumerate(popularities, start=2):
         sheet.cell(row=row_num, column=23, value=value)
 
-    sheet.cell(row=1, column=25, value=timestamp)               # colonna Y
+    sheet.cell(row=1, column=25, value=timestamp)               # column Y
 
     book.save(path)
 

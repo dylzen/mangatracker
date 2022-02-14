@@ -18,10 +18,8 @@ def menu():
     while user_input != 'q':
         if user_input == 'a':
             ac_data.write_to_xlsx(user_input)
-            quit()
         elif user_input == 'm':
             mal_data.write_to_xlsx(user_input)
-            quit()
         elif user_input == 'b':
             ac_data.write_to_xlsx(user_input)
             mal_data.write_to_xlsx(user_input)

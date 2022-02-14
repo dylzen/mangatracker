@@ -54,7 +54,7 @@ def search_manga():
     elif 1001 <= results_number <=1100 :
         pages.extend(range(1,12))
     else:
-        print("Too many results.")
+        print("Too many results. Please use fewer words.")
         exit()
 
     print("Page " + str(pages[0]))
@@ -77,17 +77,10 @@ def search_manga():
                 duplicate_links.append(result)
             print("Completed page "+str(page))
             sleep(randint(1,5))
-    # print(duplicate_links)
-    # duplicate_links[:] = [url for url in duplicate_links if any(sub in url for sub in manga_separated)]
-    # print(duplicate_links)
     links = list(set(duplicate_links))
-    # print(links)
     links = [item.lower() for item in links]
-    # print(links)
     links[:] = [url for url in links if all(ignore in url for ignore in manga_separated)]
-    # print(links)
     links.sort()
-    # print(links)
     print("Fetched "+str(len(links))+ " results.")
     availability_full_text = []
     page_titles = []
@@ -106,5 +99,4 @@ def search_manga():
             availability_full_text.append("Out of stock")
 
     lists_merge = list(zip(page_titles, links, availability_full_text))
-    # lists_merge.sort()
     print(*lists_merge, sep = "\n")
