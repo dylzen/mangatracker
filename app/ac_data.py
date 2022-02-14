@@ -1,23 +1,11 @@
-import os
 from time import sleep
 import config as config
-from openpyxl import load_workbook
+import file_ops
 import requests
 import re
 from bs4 import BeautifulSoup
 
-def get_titles():
-    print("Reading titles list from excel file...")
-    path_test = os.path.join(os.path.expanduser('~'), 'coding', 'files', 'Manga Collection 2021.xlsx')
-    workBook = load_workbook(path_test, read_only=False)
-    workSheet = workBook['auto']
-
-    ### Carico lista dei links dalla colonna 26=Z
-    mangalist = []
-    for row in workSheet.iter_rows(min_row=2, min_col=26):
-        mangalist.append(row[0].value)
-
-def get_info():
+def get_data(user_input):
     print("Fetching data...")
     home_url = config.ac_home_url
     titles_ita = []
@@ -26,13 +14,14 @@ def get_info():
     categories = []
     years = []
     volumes = []
-    italy_statuses = []
+    italy_stati = []
     next_releases = []
     next_releases_long = []
     next_releases_dates = []
     latest_releases = []
     latest_releases_dates = []
 
+    mangalist = file_ops.get_titles(user_input)
     for manga in mangalist:
         print("Fetching "+manga)
         response = requests.get(manga, allow_redirects=True)
@@ -75,9 +64,9 @@ def get_info():
         target_anno = re.sub("\s+", "", target_anno.strip())
         years.append(target_anno.strip())
         volumes.append(target_volumi.strip())
-        italy_statuses.append(target_statoIt.strip())
+        italy_stati.append(target_statoIt.strip())
 
-        if ((target_statoIt.strip() == "in corso") or (target_statoIt.strip() == "annunciato")) and soup.find(text="Prossima uscita") is not None:
+        if ((target_statoIt.strip() == "in corso") or (target_statoIt.strip() == "annunciato") or (target_statoIt.strip() == "Riedizione in corso")) and soup.find(text="Prossima uscita") is not None:
             prossima_uscita = soup.find('h3').getText()
             next_releases_long.append(prossima_uscita.strip())
             next_release_link = soup.select_one("a[href*=edizione\/]")
@@ -105,9 +94,8 @@ def get_info():
             next_releases_dates.append("N.D.")
             latest_releases.append("")
             latest_releases_dates.append("N.D.")
-            continue
+            continue           
 
-def get_release_dates():
     print("Creating dates list...")
     next_volume_dates = []
     latest_volume_dates = []
@@ -133,51 +121,60 @@ def get_release_dates():
     dates_new = []
     for date in next_volume_dates:
         dates_new.append(date.replace('/01/', 'gen').replace('/11/', 'nov').replace('/12/', 'dic'))
+    
+    return user_input, titles_ita, stories, drawings, categories, years, volumes, latest_releases, latest_volume_dates, next_releases_long, next_volume_dates, italy_stati
 
-def write_info():
-        print("Writing data to excel file...")
-        book = load_workbook(path_test)
-        sheet = book['auto']
-        column = 1
-        sheet.cell(row=1, column=column, value="Titolo italiano")
-        for i, value in enumerate(titles_ita, start=1):
-            sheet.cell(row=i+1, column=column, value=value)
-        column = 2
-        sheet.cell(row=1, column=column, value="Storia")
-        for i, value in enumerate(stories, start=1):
-            sheet.cell(row=i+1, column=column, value=value)
-        column = 3
-        sheet.cell(row=1, column=column, value="Disegni")
-        for i, value in enumerate(drawings, start=1):
-            sheet.cell(row=i+1, column=column, value=value)
-        column = 4
-        sheet.cell(row=1, column=column, value="Categoria")
-        for i, value in enumerate(categories, start=1):
-            sheet.cell(row=i+1, column=column, value=value)
-        column = 5
-        sheet.cell(row=1, column=column, value="Anno")
-        for i, value in enumerate(years, start=1):
-            sheet.cell(row=i+1, column=column, value=value)
-        column = 6
-        sheet.cell(row=1, column=column, value="Volumi pubblicati")
-        for i, value in enumerate(volumes, start=1):
-            sheet.cell(row=i+1, column=column, value=value)
-        column = 7
-        sheet.cell(row=1, column=column, value="Ultimo volume")
-        for i, value in enumerate(latest_releases, start=1):
-            sheet.cell(row=i+1, column=column, value=value)
-        column = 8
-        sheet.cell(row=1, column=column, value="Ultima data di uscita")
-        for i, value in enumerate(latest_volume_dates, start=1):
-            sheet.cell(row=i+1, column=column, value=value)
-        column = 9
-        sheet.cell(row=1, column=column, value="Prossimo volume")
-        for i, value in enumerate(next_releases_long, start=1):
-            sheet.cell(row=i+1, column=column, value=value)
-        column = 10
-        sheet.cell(row=1, column=column, value="Prossima data di uscita")
-        for i, value in enumerate(next_volume_dates, start=1):
-            sheet.cell(row=i+1, column=column, value=value)
+def write_to_xlsx(user_input):
+    user_input, titles_ita, stories, drawings, categories, years, volumes, latest_releases, latest_volume_dates, next_releases_long, next_volume_dates, italy_stati = get_data(user_input)
 
-        book.save(path_test)
-        print("Data written successfully.")
+    print("Writing data to excel file...")
+    path_test, book = file_ops.load_book()
+    sheet = book['auto']
+
+    column = 1
+    sheet.cell(row=1, column=column, value="Titolo italiano")
+    for i, value in enumerate(titles_ita, start=1):
+        sheet.cell(row=i+1, column=column, value=value)
+    column = 2
+    sheet.cell(row=1, column=column, value="Storia")
+    for i, value in enumerate(stories, start=1):
+        sheet.cell(row=i+1, column=column, value=value)
+    column = 3
+    sheet.cell(row=1, column=column, value="Disegni")
+    for i, value in enumerate(drawings, start=1):
+        sheet.cell(row=i+1, column=column, value=value)
+    column = 4
+    sheet.cell(row=1, column=column, value="Categoria")
+    for i, value in enumerate(categories, start=1):
+        sheet.cell(row=i+1, column=column, value=value)
+    column = 5
+    sheet.cell(row=1, column=column, value="Anno")
+    for i, value in enumerate(years, start=1):
+        sheet.cell(row=i+1, column=column, value=value)
+    column = 6
+    sheet.cell(row=1, column=column, value="Volumi pubblicati")
+    for i, value in enumerate(volumes, start=1):
+        sheet.cell(row=i+1, column=column, value=value)
+    column = 7
+    sheet.cell(row=1, column=column, value="Ultimo volume")
+    for i, value in enumerate(latest_releases, start=1):
+        sheet.cell(row=i+1, column=column, value=value)
+    column = 8
+    sheet.cell(row=1, column=column, value="Ultima data di uscita")
+    for i, value in enumerate(latest_volume_dates, start=1):
+        sheet.cell(row=i+1, column=column, value=value)
+    column = 9
+    sheet.cell(row=1, column=column, value="Prossimo volume")
+    for i, value in enumerate(next_releases_long, start=1):
+        sheet.cell(row=i+1, column=column, value=value)
+    column = 10
+    sheet.cell(row=1, column=column, value="Prossima data di uscita")
+    for i, value in enumerate(next_volume_dates, start=1):
+        sheet.cell(row=i+1, column=column, value=value)
+    column = 14
+    sheet.cell(row=1, column=column, value="Stato in Italia")
+    for i, value in enumerate(italy_stati, start=1):
+        sheet.cell(row=i+1, column=column, value=value)
+
+    book.save(path_test)
+    print("Data written successfully.")
