@@ -102,8 +102,18 @@ def get_data(user_input):
     session = requests.Session()
     for item in next_releases_dates:
         if item != "N.D.":
-            response_next = session.get(item)
+            print("Found new volume for manga: " +item)
+            # response_next = session.get(item)
+            response_next = requests.get(item, allow_redirects=True)
             soup_next = BeautifulSoup(response_next.text, 'html.parser')
+            if soup_next.find(text="Informazione Pubblicitaria - "):
+                print("Trovata pubblicità sul manga: " +item)
+            ### This is to bypass the video advert that sometimes appears when loading the url ###
+                session = requests.Session()
+                response_next = session.get(item)
+                sleep(1)
+                response_next = session.get(item)
+                soup_next = BeautifulSoup(response_next.text, 'html.parser')
             next_date_parent = soup_next.find('strong', text="Data pubblicazione:")
             next_volume_dates.append(next_date_parent.next_sibling.text)
         else:
