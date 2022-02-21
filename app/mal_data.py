@@ -26,7 +26,7 @@ def get_data(user_input):
     rankings = []
     popularities = []
     for item_link in file_ops.get_titles(user_input):
-        print(item_link)
+        print("Fetching: "+item_link)
         driver.get(item_link)
         wait = WebDriverWait(driver, 5)
         rating = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'div[class*="score-label"]')))
