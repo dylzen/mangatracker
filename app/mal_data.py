@@ -44,7 +44,7 @@ def get_data(user_input):
     print("Program stopped.")
     return user_input, ratings, members, rankings, popularities
 
-def write_to_xlsx(user_input):
+def mal_write_to_xlsx(user_input):
     print("Writing data to excel file...")
     user_input, ratings, members, rankings, popularities = get_data(user_input)
     path, book = file_ops.load_book()

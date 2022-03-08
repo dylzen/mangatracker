@@ -134,7 +134,7 @@ def get_data(user_input):
     
     return user_input, titles_ita, stories, drawings, categories, years, volumes, latest_releases, latest_volume_dates, next_releases_long, next_volume_dates, italy_stati
 
-def write_to_xlsx(user_input):
+def ac_write_to_xlsx(user_input):
     user_input, titles_ita, stories, drawings, categories, years, volumes, latest_releases, latest_volume_dates, next_releases_long, next_volume_dates, italy_stati = get_data(user_input)
 
     print("Writing data to excel file...")

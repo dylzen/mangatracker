@@ -10,7 +10,7 @@ def get_titles(user_input):
     if user_input == 'a':
         col = 26                    ## column 26=Y, AC link
         print("You chose AC")
-    else:
+    elif user_input == 'm':
         col = 25                    ## column 25=Y, MAL link
         print("You chose MAL")
     path_test, book = load_book()
