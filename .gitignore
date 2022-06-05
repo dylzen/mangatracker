@@ -159,3 +159,4 @@ list.txt
 *.ipynb
 __pycache__/
 unt*
+*.xlsx

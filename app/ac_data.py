@@ -138,7 +138,7 @@ def ac_write_to_xlsx(user_input):
     user_input, titles_ita, stories, drawings, categories, years, volumes, latest_releases, latest_volume_dates, next_releases_long, next_volume_dates, italy_stati = get_data(user_input)
 
     print("Writing data to excel file...")
-    path_test, book = file_ops.load_book()
+    path_collection, book = file_ops.load_book()
     sheet = book['auto']
 
     column = 1
@@ -186,5 +186,7 @@ def ac_write_to_xlsx(user_input):
     for i, value in enumerate(italy_stati, start=1):
         sheet.cell(row=i+1, column=column, value=value)
 
-    book.save(path_test)
+    book.save(path_collection)
     print("Data written successfully.")
+    
+    file_ops.copy_to_cloud(path_collection, config.path_cloud)

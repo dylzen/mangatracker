@@ -1,4 +1,5 @@
 import file_ops
+import config
 from datetime import datetime
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -47,7 +48,7 @@ def get_data(user_input):
 def mal_write_to_xlsx(user_input):
     print("Writing data to excel file...")
     user_input, ratings, members, rankings, popularities = get_data(user_input)
-    path, book = file_ops.load_book()
+    path_collection, book = file_ops.load_book()
     sheet = book['Lista']
     now = datetime.now()
     timestamp = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -70,6 +71,7 @@ def mal_write_to_xlsx(user_input):
 
     sheet.cell(row=1, column=25, value=timestamp)               # column Y
 
-    book.save(path)
-
+    book.save(path_collection)
+    
+    file_ops.copy_to_cloud(path_collection, config.path_cloud)
 
