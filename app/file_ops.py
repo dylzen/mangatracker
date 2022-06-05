@@ -1,7 +1,4 @@
-from curses.ascii import US
 import os
-from readline import read_init_file
-from secrets import choice
 import shutil
 from openpyxl import load_workbook
 
@@ -27,12 +24,12 @@ def get_titles(user_input):
 
 def copy_to_cloud(src, dst):
     choice = None
-    while choice not in {"s","n"}:
-        choice = input("Copiare? (s/n): ")
+    while choice not in {"y","n"}:
+        choice = input("Copy file to cloud directory? (y/n): ")
     
-    if choice  == "s":
+    if choice  == "y":
         shutil.copy2(src, dst)
-        print("File copiato nel cloud.")
+        print("Collection file copied for cloud sync.")
     elif choice  == "n":
-        print("File non copiato.")
+        print("Collection file not copied.")
         

@@ -72,6 +72,7 @@ def mal_write_to_xlsx(user_input):
     sheet.cell(row=1, column=25, value=timestamp)               # column Y
 
     book.save(path_collection)
-    
+    print("Collection file updated successfully.")
+        
     file_ops.copy_to_cloud(path_collection, config.path_cloud)
 

@@ -102,12 +102,12 @@ def get_data(user_input):
     session = requests.Session()
     for item in next_releases_dates:
         if item != "N.D.":
-            print("Found new volume for manga: " +item)
+            print("Found new release date for manga: " +item)
             # response_next = session.get(item)
             response_next = requests.get(item, allow_redirects=True)
             soup_next = BeautifulSoup(response_next.text, 'html.parser')
             if soup_next.find(text="Informazione Pubblicitaria - "):
-                print("Trovata pubblicità sul manga: " +item)
+                print("Found an ad for manga: " + item + " , retrying")
             ### This is to bypass the video advert that sometimes appears when loading the url ###
                 session = requests.Session()
                 response_next = session.get(item)
@@ -187,6 +187,8 @@ def ac_write_to_xlsx(user_input):
         sheet.cell(row=i+1, column=column, value=value)
 
     book.save(path_collection)
-    print("Data written successfully.")
+    print("Collection file updated successfully.")
     
     file_ops.copy_to_cloud(path_collection, config.path_cloud)
+    print("Collection file copied for cloud sync.")
+
